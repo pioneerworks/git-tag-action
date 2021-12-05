@@ -1,6 +1,6 @@
-name: 'Git Tag Action'
+name: 'Add Git Tag'
 description: 'Add a git tag to the current workflow commit'
-author: 'Hole19'
+author: 'Hole19 & cardinalby'
 runs:
   using: 'docker'
   image: 'Dockerfile'
