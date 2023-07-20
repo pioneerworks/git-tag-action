@@ -13,6 +13,7 @@ fi
 
 # get GitHub API endpoints prefix
 git_refs_url=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
+git_tags_url=$(jq .repository.git_tags_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
 
 # check if tag already exists in the cloned repo
 tag_exists="false"
@@ -46,13 +47,16 @@ EOF
 else
   # create new tag
   echo "creating new tag, ref: $git_refs_url"
-#  curl -s -X POST "$git_refs_url" \
-#  -H "Authorization: token $GITHUB_TOKEN" \
-#  -d @- << EOF
+  echo "tags url: $git_tags_url"
+  echo "github context: $GITHUB_CONTEXT"
+  curl -s -X POST "$git_tags_url" \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  -d @- << EOF
 
-#  {
-#    "ref": "refs/tags/$TAG",
-#    "sha": "$GITHUB_SHA"
-#  }
+  {
+    "tag": "$TAG",
+    "object": "$GITHUB_SHA",
+    "message":"abc" 
+  }
 EOF
 fi
