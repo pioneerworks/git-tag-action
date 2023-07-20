@@ -54,10 +54,9 @@ else
   # create new tag
   echo "tag: $TAG"
 
-  echo "body: $body";
-  output=$(curl -X POST "$git_tags_url" \
+  curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- << EOF
+  -d @- << EOF | output=$(</dev/stdin) 
       {
       "tag": "$TAG",
       "object": "$GITHUB_SHA",
@@ -65,7 +64,8 @@ else
       "type": "commit"
    }
 EOF 
-)
+
+
 echo "output: $output";
   # create reference
 #   curl -X POST "$git_refs_url" \
