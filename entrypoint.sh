@@ -45,13 +45,14 @@ then
 EOF
 else
   # create new tag
-  curl -s -X POST "$git_refs_url" \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- << EOF
+  echo "creating new tag, ref: $git_refs_url"
+#  curl -s -X POST "$git_refs_url" \
+#  -H "Authorization: token $GITHUB_TOKEN" \
+#  -d @- << EOF
 
-  {
-    "ref": "refs/tags/$TAG",
-    "sha": "$GITHUB_SHA"
-  }
+#  {
+#    "ref": "refs/tags/$TAG",
+#    "sha": "$GITHUB_SHA"
+#  }
 EOF
 fi
