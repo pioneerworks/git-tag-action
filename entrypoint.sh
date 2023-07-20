@@ -64,6 +64,7 @@ generate_post_data()
  "type": "commit"
 }
 EOF
+}
 
   curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
