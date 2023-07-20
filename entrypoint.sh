@@ -64,7 +64,7 @@ else
       "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
       "type": "commit"
    }
-   EOF 
+EOF 
 )
 echo "output: $output";
   # create reference
