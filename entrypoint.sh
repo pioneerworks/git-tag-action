@@ -57,7 +57,7 @@ else
   echo "body: $body";
   output=$(curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- <<EOF
+  -d @- << EOF
       {
       "tag": "$TAG",
       "object": "$GITHUB_SHA",
@@ -77,6 +77,5 @@ echo "output: $output";
 #    "sha": "$GITHUB_SHA"
 #  }
 #EOF
-
 
 fi
