@@ -35,7 +35,7 @@ echo "**pushing tag $TAG to repo $GITHUB_REPOSITORY"
 echo "here"
 if $tag_exists
 then
-
+  echo "Updating tag on remote repo"
   # update tag
 curl -s -X PATCH "$git_refs_url/tags/$TAG" \
   -H "Authorization: token $GITHUB_TOKEN" \
@@ -49,6 +49,7 @@ EOF
 
 
 else
+  echo "creating tag in remote repo, and creating reference"
   # create new tag
   echo "tag: $TAG"
   curl -X POST "$git_tags_url" \
@@ -61,9 +62,10 @@ else
      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
      "type": "commit"
   }
+EOF
 
   # create reference
-   curl -s -X POST "$git_refs_url" \
+   curl -X POST "$git_refs_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
