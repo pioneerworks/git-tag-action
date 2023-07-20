@@ -54,7 +54,7 @@ else
   # create new tag
   echo "tag: $TAG"
 
-  body=<<EOF
+  body=$(cat <<EOF
      {
      "tag": "$TAG",
      "object": "$GITHUB_SHA",
@@ -62,7 +62,7 @@ else
      "type": "commit"
   } 
   EOF
-
+  )
 
   curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
