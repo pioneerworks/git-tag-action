@@ -32,7 +32,7 @@ else
 fi
 
 echo "**pushing tag $TAG to repo $GITHUB_REPOSITORY"
-
+echo "here"
 if $tag_exists
 then
 
