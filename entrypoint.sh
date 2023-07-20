@@ -51,7 +51,7 @@ EOF
 else
   # create new tag
   echo "tag: $TAG"
-output=`curl -s -X POST "$git_tags_url" \
+output=`curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
