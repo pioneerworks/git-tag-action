@@ -56,7 +56,7 @@ output=`curl -s -X POST "$git_tags_url" \
   -d @- << EOF
 
   {
-     "tag": "v.3.86.1005",
+     "tag": "$TAG",
      "object": "$GITHUB_HEAD_SHA",
      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
      "type": "commit"
