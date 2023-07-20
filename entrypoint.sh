@@ -54,20 +54,23 @@ else
   # create new tag
   echo "tag: $TAG"
 
+generate_post_data()
+{
+  cat <<EOF
+{
+ "tag": "$TAG",
+ "object": "$GITHUB_SHA",
+ "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
+ "type": "commit"
+}
+EOF
+
   curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- << EOF | output=$(</dev/stdin) 
-      {
-      "tag": "$TAG",
-      "object": "$GITHUB_SHA",
-      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
-      "type": "commit"
-   }
-EOF 
+  -d "$(generate_post_data)"
 
 
-echo "output: $output";
-  # create reference
+# create reference
 #   curl -X POST "$git_refs_url" \
 #  -H "Authorization: token $GITHUB_TOKEN" \
 #  -d @- << EOF
