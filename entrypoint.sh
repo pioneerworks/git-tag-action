@@ -54,22 +54,19 @@ else
   # create new tag
   echo "tag: $TAG"
 
-  body=$(cat <<EOF
-     {
-     "tag": "$TAG",
-     "object": "$GITHUB_SHA",
-     "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
-     "type": "commit"
-  } 
-  EOF
-  )
-
   echo "body: $body";
-  curl -X POST "$git_tags_url" \
+  output=$(curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- $body 
-
-
+  -d @- <<EOF
+      {
+      "tag": "$TAG",
+      "object": "$GITHUB_SHA",
+      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
+      "type": "commit"
+   }
+   EOF 
+)
+echo "output: $output";
   # create reference
 #   curl -X POST "$git_refs_url" \
 #  -H "Authorization: token $GITHUB_TOKEN" \
