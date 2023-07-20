@@ -37,7 +37,7 @@ if $tag_exists
 then
 
   # update tag
-  curl -s -X PATCH "$git_refs_url/tags/$TAG" \
+curl -s -X PATCH "$git_refs_url/tags/$TAG" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
@@ -46,6 +46,8 @@ then
     "force": true
   }
 EOF
+
+
 else
   # create new tag
   echo "tag: $TAG"
@@ -59,6 +61,7 @@ output=`curl -s -X POST "$git_tags_url" \
      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
      "type": "commit"
   }
-EOF`
-echo "$output"
+EOF
+`;
+echo "output: $output";
 fi
