@@ -51,17 +51,27 @@ EOF
 else
   # create new tag
   echo "tag: $TAG"
-output=`curl -X POST "$git_tags_url" \
+  curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
   {
      "tag": "$TAG",
-     "object": "$GITHUB_HEAD_SHA",
+     "object": "$GITHUB_SHA",
      "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
      "type": "commit"
   }
+
+  # create reference
+   curl -s -X POST "$git_refs_url" \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  -d @- << EOF
+
+  {
+    "ref": "refs/tags/$TAG",
+    "sha": "$GITHUB_SHA"
+  }
 EOF
-`;
-echo "output: $output";
+
+
 fi
