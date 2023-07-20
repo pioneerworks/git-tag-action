@@ -64,6 +64,7 @@ else
   EOF
   )
 
+  echo "body: $body";
   curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- $body 
