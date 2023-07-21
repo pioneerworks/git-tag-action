@@ -43,7 +43,7 @@ then
   -d @- << EOF
 
   {
-    "sha": "$GITHUB_SHA",
+    "sha": "$GITHUB_HEAD_SHA",
     "force": true
   }
 EOF
