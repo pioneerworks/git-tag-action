@@ -70,11 +70,11 @@ EOF
   -H "Authorization: token $GITHUB_TOKEN" \
   -d "$(generate_post_data)")
   echo "The post object response: ${getResponse}";
-  sha_name=$(jq -r '.sha' <<<"$getResponse")
-  echo "sha name: ${sha_name}"; 
+  git_tag_sha=$(jq -r '.sha' <<<"$getResponse")
+  echo "git tag sha: ${git_tag_sha}"; 
 
-  if $sha_name
-  then
+#  if $sha_name
+#  then
      echo "tag object created, making reference"
 
     curl -X POST "$git_refs_url" \
@@ -83,8 +83,8 @@ EOF
 
     {
       "ref": "refs/tags/$TAG",
-      "sha": "$sha_name"
+      "sha": "$git_tag_sha"
     }
 EOF
-  fi
+#  fi
 fi
