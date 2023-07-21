@@ -74,6 +74,7 @@ EOF
   echo "sha name: ${sha_name}"; 
 
   if $sha_name
+  then
      echo "tag object created, making reference";
 
 # create reference
