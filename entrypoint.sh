@@ -75,9 +75,8 @@ EOF
 
   if $sha_name
   then
-     echo "tag object created, making reference";
+     echo "tag object created, making reference"
 
-# create reference
     curl -X POST "$git_refs_url" \
     -H "Authorization: token $GITHUB_TOKEN" \
     -d @- << EOF
