@@ -73,15 +73,18 @@ EOF
   sha_name=$(jq -r '.sha' <<<"$getResponse")
   echo "sha name: ${sha_name}"; 
 
+  if $sha_name
+     echo "tag object created, making reference";
+
 # create reference
-#   curl -X POST "$git_refs_url" \
-#  -H "Authorization: token $GITHUB_TOKEN" \
-#  -d @- << EOF
+    curl -X POST "$git_refs_url" \
+    -H "Authorization: token $GITHUB_TOKEN" \
+    -d @- << EOF
 
-#  {
-#    "ref": "refs/tags/$TAG",
-#    "sha": "$GITHUB_SHA"
-#  }
-#EOF
-
+    {
+      "ref": "refs/tags/$TAG",
+      "sha": "$sha_name"
+    }
+EOF
+  fi
 fi
