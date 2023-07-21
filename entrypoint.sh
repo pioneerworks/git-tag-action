@@ -38,7 +38,7 @@ then
   echo "Updating tag on remote repo"
   # update tag
 
-curl -s -X PATCH "$git_refs_url/tags/$TAG" \
+  curl -s -X PATCH "$git_refs_url/tags/$TAG" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
@@ -73,8 +73,8 @@ EOF
   git_tag_sha=$(jq -r '.sha' <<<"$getResponse")
   echo "git tag sha: ${git_tag_sha}"; 
 
-#  if $sha_name
-#  then
+  if [ $git_tag_sha != '' ]; 
+  then
      echo "tag object created, making reference"
 
     curl -X POST "$git_refs_url" \
@@ -86,5 +86,5 @@ EOF
       "sha": "$git_tag_sha"
     }
 EOF
-#  fi
+  fi
 fi
