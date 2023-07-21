@@ -66,10 +66,12 @@ generate_post_data()
 EOF
 }
 
-  getResponseTagObjectPost=$(curl -X POST "$git_tags_url" \
+  getResponse=$(curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d "$(generate_post_data)")
-  echo "The post object response: ${getREsponseTagObjectPost}";
+  echo "The post object response: ${getResponse}";
+  sha_name=$(jq -r '.sha' <<<"$getResponse")
+  echo "sha name: ${sha_name}"; 
 
 # create reference
 #   curl -X POST "$git_refs_url" \
