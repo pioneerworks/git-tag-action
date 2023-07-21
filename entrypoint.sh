@@ -66,10 +66,10 @@ generate_post_data()
 EOF
 }
 
-  curl -X POST "$git_tags_url" \
+  getResponseTagObjectPost=$(curl -X POST "$git_tags_url" \
   -H "Authorization: token $GITHUB_TOKEN" \
-  -d "$(generate_post_data)"
-
+  -d "$(generate_post_data)")
+  echo "The post object response: $getREsponseTagObjectPost";
 
 # create reference
 #   curl -X POST "$git_refs_url" \
