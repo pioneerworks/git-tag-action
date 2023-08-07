@@ -13,6 +13,8 @@ fi
 
 # get GitHub API endpoints prefix
 git_refs_url=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
+git_tags_url=$(jq .repository.git_tags_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
+
 
 # check if tag already exists in the cloned repo
 tag_exists="false"
@@ -30,28 +32,59 @@ else
 fi
 
 echo "**pushing tag $TAG to repo $GITHUB_REPOSITORY"
-
+echo "here"
 if $tag_exists
 then
+  echo "Updating tag on remote repo"
   # update tag
+
   curl -s -X PATCH "$git_refs_url/tags/$TAG" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
   {
-    "sha": "$GITHUB_SHA",
+    "sha": "$GITHUB_HEAD_SHA",
     "force": true
   }
 EOF
-else
-  # create new tag
-  curl -s -X POST "$git_refs_url" \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- << EOF
 
-  {
-    "ref": "refs/tags/$TAG",
-    "sha": "$GITHUB_SHA"
-  }
+
+else
+  echo "creating tag in remote repo, and creating reference"
+  # create new tag
+  echo "tag: $TAG"
+
+generate_post_data()
+{
+  cat <<EOF
+{
+ "tag": "$TAG",
+ "object": "$GITHUB_SHA",
+ "message":"$GITHUB_ACTOR updated PR $GITHUB_HEAD_REF to $GITHUB_BASE_REF",
+ "type": "commit"
+}
 EOF
+}
+
+  getResponse=$(curl -X POST "$git_tags_url" \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  -d "$(generate_post_data)")
+  echo "The post object response: ${getResponse}";
+  git_tag_sha=$(jq -r '.sha' <<<"$getResponse")
+  echo "git tag sha: ${git_tag_sha}"; 
+
+  if [ $git_tag_sha != '' ]; 
+  then
+     echo "tag object created, making reference"
+
+    curl -X POST "$git_refs_url" \
+    -H "Authorization: token $GITHUB_TOKEN" \
+    -d @- << EOF
+
+    {
+      "ref": "refs/tags/$TAG",
+      "sha": "$git_tag_sha"
+    }
+EOF
+  fi
 fi
